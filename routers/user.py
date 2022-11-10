@@ -5,7 +5,7 @@ import models, schemas, utils
 
 router = APIRouter()
 
-@router.post("/users", response_model=schemas.UserDetail)
+@router.post("/", response_model=schemas.UserDetail)
 def create_user(user: schemas.User, db: Session = Depends(get_db)):
     user.password = utils.hash_password(user.password)
     user = models.User(**user.dict())
@@ -14,7 +14,7 @@ def create_user(user: schemas.User, db: Session = Depends(get_db)):
     db.refresh(user)
     return user
 
-@router.get("/users/{user_id}", response_model=schemas.UserDetail)
+@router.get("/{user_id}", response_model=schemas.UserDetail)
 def get_user(user_id: int, db: Session = Depends(get_db)):
     user = db.query(models.User).filter(models.User.id == user_id).first()
     if not user:
